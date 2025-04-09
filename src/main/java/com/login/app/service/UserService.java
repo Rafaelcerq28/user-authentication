@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.login.app.model.User;
@@ -11,7 +12,7 @@ import com.login.app.repository.UserRepository;
 
 @Service
 public class UserService {
-
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
     private UserRepository userRepository;
     
     public UserService(UserRepository userRepository) {
@@ -26,6 +27,7 @@ public class UserService {
             return ResponseEntity.badRequest().build();
         }
 
+        user.setPassword(encoder.encode(user.getPassword()));
         User userToSave = userRepository.save(user);
         return ResponseEntity.ok(userToSave);
     }
