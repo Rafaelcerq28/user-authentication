@@ -3,6 +3,7 @@ package com.login.app.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,16 +46,15 @@ public class UserController {
         return userService.deleteUser(id);
     }
     
-    public ResponseEntity<User> register(User user) {
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User user) {
         return userService.addUser(user);
-
     }
 
-    //upadate user?
-    
-    //register user
-    //login user
-
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        return userService.login(user);
+    }
     //fazer um cadastro de peças e usar o usuario logado e a role para fazer as permissoes de acesso
 
 }

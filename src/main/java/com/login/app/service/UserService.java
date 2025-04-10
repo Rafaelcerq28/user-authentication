@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +16,18 @@ import com.login.app.repository.UserRepository;
 @Service
 public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    
     private UserRepository userRepository;
     
-    public UserService(UserRepository userRepository) {
+    private AuthenticationManager authenticationManager;
+    private JWTService jwtService;
+    
+    
+    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager,
+            JWTService jwtService) {
         this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public ResponseEntity<User> addUser(User user) {
@@ -54,6 +65,18 @@ public class UserService {
         }
         userRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    public String login(User user) {
+        Authentication authentication = 
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        
+        // If the user is authenticated, generate a JWT token
+        if(authentication.isAuthenticated()){
+            return jwtService.generateToken(user);
+        }
+
+        return "failure";
     }
 
     
