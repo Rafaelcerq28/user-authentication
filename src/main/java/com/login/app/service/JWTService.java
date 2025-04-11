@@ -10,6 +10,7 @@ import java.util.function.Function;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,9 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JWTService {
     // Secret key used to sign the JWT token
-    private String secretKey = "hHOli475266Ad52F2FES";
+    // private String secretKey = "hHOli475266Ad52F2FES";
+    @Value("${token.key}")
+    private String secretKey;
 
     // Constructor that generates a secret key
     public JWTService() {
