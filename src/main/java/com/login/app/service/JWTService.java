@@ -54,12 +54,10 @@ public class JWTService {
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 // Sets the expiration date to 30 minutes from the current time
-                // .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .and()
                 .signWith(getKey())
                 .compact();
-
     }
 
     // Decodes the secret key and returns a Key object

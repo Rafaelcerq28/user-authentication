@@ -73,7 +73,8 @@ public class UserService {
         
         // If the user is authenticated, generate a JWT token
         if(authentication.isAuthenticated()){
-            return jwtService.generateToken(user);
+            Optional<User> authenticatedUser = userRepository.findByUsername(user.getUsername());
+            return jwtService.generateToken(authenticatedUser.get());
         }
 
         return "failure";
