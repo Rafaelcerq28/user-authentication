@@ -46,7 +46,6 @@ public class SecurityConfig {
         
         // Enables HTTP Basic authentication, allowing clients to authenticate via an Authorization header.
         http.httpBasic(Customizer.withDefaults());
-        
         // Configures session management to be stateless. 
         // This is ideal for APIs where each request should be authenticated independently.
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
