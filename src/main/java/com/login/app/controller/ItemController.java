@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +45,10 @@ public class ItemController {
     }
 
     //delete item
-
+    @DeleteMapping("/item/{id}")
+    public ResponseEntity<Item> deleteItem(@PathVariable(value="id") Long id){
+        return itemService.deleteItem(id);
+    }
     //update item
 
 

@@ -61,4 +61,16 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public ResponseEntity<Item> deleteItem(Long id) {
+        Optional <Item> itemTodelete = itemRepository.findById(id);
+
+        if(itemTodelete.isPresent() == false){
+            return ResponseEntity.notFound().build();
+        }
+
+        itemRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
