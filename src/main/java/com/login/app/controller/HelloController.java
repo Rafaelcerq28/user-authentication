@@ -67,6 +67,7 @@ public class HelloController {
     }
 
     @GetMapping("/test")
+    //testar a role no token
     public String test(Authentication auth) {
         return auth.getAuthorities().toString();
 }

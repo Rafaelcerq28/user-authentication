@@ -37,7 +37,7 @@ public class UserService {
         if(userToCheck.isPresent() == true){
             return ResponseEntity.badRequest().build();
         }
-
+        
         user.setPassword(encoder.encode(user.getPassword()));
         User userToSave = userRepository.save(user);
         return ResponseEntity.ok(userToSave);
