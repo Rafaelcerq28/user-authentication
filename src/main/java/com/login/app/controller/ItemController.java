@@ -2,6 +2,7 @@ package com.login.app.controller;
 
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,7 @@ public class ItemController {
 
     //get item by id
     @GetMapping("/item/{id}")
-    public ResponseEntity<Item> getItem(@PathVariable(value="id") Long id){
+    public EntityModel<Item> getItem(@PathVariable(value="id") Long id){
         return itemService.getItem(id);
     }
     

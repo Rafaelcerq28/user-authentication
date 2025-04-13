@@ -1,11 +1,17 @@
 package com.login.app.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.login.app.controller.ItemController;
 import com.login.app.model.Item;
 import com.login.app.repository.ItemRepository;
 
@@ -26,17 +32,29 @@ public class ItemService {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().body(itemRepository.save(item));
+        Item savedItem = itemRepository.save(item);
+        //generating product uri
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().
+                                                    path("/{id}")
+                                                    .buildAndExpand(savedItem.getId()).toUri();
+
+
+        return ResponseEntity.created(location).body(savedItem);
     }
 
-    public ResponseEntity<Item> getItem(Long id) {
+    public EntityModel<Item> getItem(Long id) {
         Optional<Item> itemToGet = itemRepository.findById(id);
 
         if(itemToGet.isPresent() == false){
-            return ResponseEntity.notFound().build();
+            return null;
         }
 
-        return ResponseEntity.ok(itemToGet.get());
+        EntityModel<Item> itemModel = EntityModel.of(itemToGet.get());
+        
+        WebMvcLinkBuilder linkToAllItems = linkTo(methodOn(ItemController.class).getItems());
+        itemModel.add(linkToAllItems.withRel("all-items"));
+        
+        return itemModel;
     }
 
     public List<Item> getItems() {
